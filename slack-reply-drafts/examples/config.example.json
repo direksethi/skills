@@ -1,0 +1,7 @@
+{
+  "team_id": "TXXXXXXXXXX",
+  "user_id": "UXXXXXXXXXX",
+  "data_dir": "~/.local/share/slack-reply-drafts",
+  "workspace_url": "https://your-workspace.slack.com",
+  "token_file": "~/.config/slack-reply-drafts/token.env"
+}

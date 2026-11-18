@@ -1,0 +1,4 @@
+interface:
+  display_name: "Latest Claude Code Chat"
+  short_description: "Find and summarize the newest Claude Code thread"
+  default_prompt: "Use $latest-claude-code-chat to find my latest Claude Code conversation and summarize where it stopped."

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# agent-browser pointed at a self-hosted Steel Browser.
+# Each caller gets its own pinned tab so parallel agents do not collide.
+#
+# Usage: steel open <url> | snapshot | click @e3 | fill @e2 "text" | screenshot <path> | close | ...
+#
+# Environment:
+#   STEEL_CDP          Required. CDP endpoint of your Steel instance, for example ws://steel.internal:3000
+#   AGENT_BROWSER_BIN  Optional. Path to the agent-browser binary (default: agent-browser on PATH)
+set -euo pipefail
+
+bin="${AGENT_BROWSER_BIN:-agent-browser}"
+
+usage() {
+  sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  if command -v "$bin" >/dev/null 2>&1; then
+    printf '\nAll other commands and options are passed to agent-browser:\n\n'
+    exec "$bin" --help
+  fi
+  exit 0
+fi
+
+if [[ -z "${STEEL_CDP:-}" ]]; then
+  echo "steel: STEEL_CDP is not set. Export the CDP endpoint of your Steel instance, for example ws://steel.internal:3000" >&2
+  exit 2
+fi
+
+if ! command -v "$bin" >/dev/null 2>&1; then
+  echo "steel: agent-browser not found. Install it (npm i -g agent-browser) or set AGENT_BROWSER_BIN." >&2
+  exit 127
+fi
+
+exec "$bin" --cdp "$STEEL_CDP" --pin-tab "$@"

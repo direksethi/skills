@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Read-only Slack Web API caller.
+#
+# Usage: slack-read <method> [key=value ...]
+#   slack-read auth.test
+#   slack-read conversations.list types=public_channel,private_channel,im,mpim exclude_archived=true limit=200
+#   slack-read conversations.history channel=C123 oldest=1700000000 limit=200
+#   slack-read conversations.replies channel=C123 ts=1700000000.000100
+#   slack-read users.info user=U123
+#
+# Environment:
+#   SLACK_USER_TOKEN  Required. A Slack user token with read scopes only.
+#
+# Write methods are refused here. Give the token no write scopes either.
+set -euo pipefail
+
+usage() {
+  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+if [[ $# -eq 0 ]]; then
+  usage >&2
+  exit 2
+fi
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+method="$1"; shift
+case "$method" in
+  *.list|*.history|*.replies|*.info|auth.test|users.conversations|conversations.members|users.profile.get|users.getPresence) ;;
+  *) echo "slack-read: refusing non-read method '$method'" >&2; exit 2 ;;
+esac
+
+if [[ -z "${SLACK_USER_TOKEN:-}" ]]; then
+  echo "slack-read: SLACK_USER_TOKEN is not set" >&2
+  exit 2
+fi
+
+args=()
+for kv in "$@"; do args+=(--data-urlencode "$kv"); done
+# The token is passed on stdin so it never appears in the process list.
+printf 'header = "Authorization: Bearer %s"\n' "$SLACK_USER_TOKEN" |
+  curl -sS --fail-with-body --config - "${args[@]}" "https://slack.com/api/$method"

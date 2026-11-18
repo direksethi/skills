@@ -1,0 +1,5 @@
+interface:
+  display_name: "Dev Handoff"
+  short_description: "Git-committed session handoff snapshot"
+policy:
+  allow_implicit_invocation: false
