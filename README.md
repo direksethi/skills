@@ -11,6 +11,8 @@ Skills that Direk Sethi uses daily with Claude Code and Codex. Each folder is a 
 | [latest-claude-code-chat](latest-claude-code-chat/SKILL.md) | Finds the newest local Claude Code transcript and summarises where it stopped. |
 | [steel-browser](steel-browser/SKILL.md) | Drives a self-hosted Steel Browser through the agent-browser CLI, with a hand-off to a human for logins, 2FA and captchas. |
 | [slack-reply-drafts](slack-reply-drafts/SKILL.md) | Drafts Slack replies in your own writing style, with a separate learned profile per conversation. Read-only: it never sends. |
+| [generate-docs](generate-docs/SKILL.md) | Turns a repository into code-verified Markdown documentation and a branded PDF with linked contents and bookmarks. |
+| [video-finish](video-finish/SKILL.md) | Finishes a talking-head or screen-recording video with ffmpeg: tightened pauses, retiming to narration, punch-in zooms and word-highlight captions. |
 
 ## Install
 
@@ -39,6 +41,8 @@ Keep each folder intact: the instructions refer to scripts by paths relative to 
 | latest-claude-code-chat | Python 3.9 or later. Reads transcripts under `~/.claude/projects`. |
 | steel-browser | A running [Steel Browser](https://github.com/steel-dev/steel-browser) instance, the [agent-browser](https://github.com/vercel-labs/agent-browser) CLI, `bash`, and `STEEL_CDP` set to the instance's CDP endpoint. |
 | slack-reply-drafts | Python 3.9 or later on Linux or macOS, `bash`, `curl`, and a Slack user token in `SLACK_USER_TOKEN` with read scopes only. |
+| generate-docs | Python 3.9 or later. See the skill for the PDF toolchain it expects. |
+| video-finish | `ffmpeg` with libx264 and libass, Python 3.9 or later, and a clone of [talking-head-video-tools](https://github.com/direksethi/talking-head-video-tools). |
 
 ### slack-reply-drafts configuration
 
